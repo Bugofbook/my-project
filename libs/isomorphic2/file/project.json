@@ -1,0 +1,41 @@
+{
+  "name": "isomorphic2-file",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/isomorphic2/file/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/isomorphic2/file",
+        "main": "libs/isomorphic2/file/src/index.ts",
+        "tsConfig": "libs/isomorphic2/file/tsconfig.lib.json",
+        "assets": ["libs/isomorphic2/file/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs isomorphic2-file {args.ver} {args.tag}"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/isomorphic2/file/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/isomorphic2/file/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["isomorphic", "file"]
+}

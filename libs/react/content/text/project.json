@@ -1,0 +1,24 @@
+{
+  "name": "react-content-text",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/react/content/text/src",
+  "projectType": "library",
+  "tags": ["react", "content"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/react/content/text/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/react/content/text/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

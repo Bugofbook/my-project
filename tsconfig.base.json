@@ -15,6 +15,56 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@bugofbook/browser/file/read/core": [
+        "libs/browser/file/read/core/src/index.ts"
+      ],
+      "@bugofbook/browser/file/read/csv": [
+        "libs/browser/file/read/csv/src/index.ts"
+      ],
+      "@bugofbook/browser/file/read/excel": [
+        "libs/browser/file/read/excel/src/index.ts"
+      ],
+      "@bugofbook/browser/file/write/core": [
+        "libs/browser/file/write/core/src/index.ts"
+      ],
+      "@bugofbook/browser/file/write/csv": [
+        "libs/browser/file/write/csv/src/index.ts"
+      ],
+      "@bugofbook/browser/file/write/excel": [
+        "libs/browser/file/write/excel/src/index.ts"
+      ],
+      "@bugofbook/data/queue/map": [
+        "libs/isomorphic/data/queue/map/src/index.ts"
+      ],
+      "@bugofbook/data/queueMap": [
+        "libs/isomorphic/data/queue-map/src/index.ts"
+      ],
+      "@bugofbook/react/hook/text": ["libs/react/hook/text/src/index.ts"],
+      "@bugofbook/isomorphic/file/read/core": [
+        "libs/isomorphic/file/read/core/src/index.ts"
+      ],
+      "@bugofbook/isomorphic/file/read/csv": [
+        "libs/isomorphic/file/read/csv/src/index.ts"
+      ],
+      "@bugofbook/isomorphic/file/read/exceljs": [
+        "libs/isomorphic/file/read/exceljs/src/index.ts"
+      ],
+      "@bugofbook/isomorphic/file/write/csv": [
+        "libs/isomorphic/file/write/csv/src/index.ts"
+      ],
+      "@bugofbook/isomorphic/file/write/exceljs": [
+        "libs/isomorphic/file/write/exceljs/src/index.ts"
+      ],
+      "@bugofbook/isomorphic2/file": ["libs/isomorphic2/file/src/index.ts"],
+      "@bugofbook/react/content": ["libs/react/content/text/src/index.ts"],
+      "@bugofbook/react/content/system": [
+        "libs/react/content/system/src/index.ts"
+      ],
+      "@bugofbook/react/hook/system": ["libs/react/hook/system/src/index.ts"],
+      "@bugofbook/react/system": ["libs/react/system/src/index.ts"],
+      "@bugofbook/time/unixtimezone": [
+        "libs/isomorphic/time/unixtimezone/src/index.ts"
+      ],
       "@my-project/api-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },

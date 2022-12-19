@@ -1,0 +1,41 @@
+{
+  "name": "isomorphic-file-read-csv",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/isomorphic/file/read/csv/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/isomorphic/file/read/csv",
+        "main": "libs/isomorphic/file/read/csv/src/index.ts",
+        "tsConfig": "libs/isomorphic/file/read/csv/tsconfig.lib.json",
+        "assets": ["libs/isomorphic/file/read/csv/*.md"]
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs isomorphic-file-read-csv {args.ver} {args.tag}"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/isomorphic/file/read/csv/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/isomorphic/file/read/csv/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["isomorphic", "file", "read"]
+}

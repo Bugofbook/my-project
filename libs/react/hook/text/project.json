@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "react-hook-text",
+  "sourceRoot": "libs/react/hook/text/src",
+  "projectType": "library",
+  "tags": ["react"],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/react/hook/text",
+        "tsConfig": "libs/react/hook/text/tsconfig.lib.json",
+        "project": "libs/react/hook/text/package.json",
+        "entryFile": "libs/react/hook/text/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/react/hook/text/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/react/hook/text/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/react/hook/text/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
