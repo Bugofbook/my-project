@@ -39,7 +39,6 @@
       "@bugofbook/data/queueMap": [
         "libs/isomorphic/data/queue-map/src/index.ts"
       ],
-      "@bugofbook/react/hook/text": ["libs/react/hook/text/src/index.ts"],
       "@bugofbook/isomorphic/file/read/core": [
         "libs/isomorphic/file/read/core/src/index.ts"
       ],
@@ -60,7 +59,17 @@
       "@bugofbook/react/content/system": [
         "libs/react/content/system/src/index.ts"
       ],
+      "@bugofbook/react/context/portal": [
+        "libs/react/context/portal/src/index.ts"
+      ],
+      "@bugofbook/react/hook/feedback": [
+        "libs/react/hook/feedback/src/index.ts"
+      ],
       "@bugofbook/react/hook/system": ["libs/react/hook/system/src/index.ts"],
+      "@bugofbook/react/hook/text": ["libs/react/hook/text/src/index.ts"],
+      "@bugofbook/react/reducer/feedback": [
+        "libs/react/reducer/feedback/src/index.ts"
+      ],
       "@bugofbook/react/system": ["libs/react/system/src/index.ts"],
       "@bugofbook/time/unixtimezone": [
         "libs/isomorphic/time/unixtimezone/src/index.ts"
