@@ -68,7 +68,7 @@ function createCloseAction(): closeYesnoDialogAction {
         type: 'close',
     })
 }
-function createSetConfigAction<T extends Record<string, any>>({config, title, content, yesText, noText, onYes, onNo}: {config: T, title?: string, content?: string, yesText?: string, noText?: string, onYes?: yesDialogMethod, onNo?: noDialogMethod}): setConfigYesnoDialogAction<T> {
+function createSetConfigAction<T extends Record<string, any>>({config, title, content, yesText, noText, onYes, onNo}: {config?: T, title?: string, content?: string, yesText?: string, noText?: string, onYes?: yesDialogMethod, onNo?: noDialogMethod}): setConfigYesnoDialogAction<T> {
     return ({
         type: 'setConfig',
         config,

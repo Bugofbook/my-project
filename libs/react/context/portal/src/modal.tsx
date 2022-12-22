@@ -3,21 +3,21 @@ import { useModal } from '@bugofbook/react/hook/feedback'
 import { modalState, initModalState } from '@bugofbook/react/reducer/feedback'
 
 export function createModalContext<T extends Record<string, any>>() {
-    const ModalContext = createContext<modalState<T>>(initModalState<T>(false));
-    const ModalActiveContext = createContext({open : (prop: T) => {return;}, close: () => {return;}});
+    const ModalStateContext = createContext<modalState<T>>(initModalState<T>(false));
+    const ModalMethodsContext = createContext({open : (prop: T) => {return;}, close: () => {return;}});
     const ModalProvider = ({children}: {children: ReactNode}) => {
         const [state, action] = useModal<T>({initOpen: false});
         return (
-            <ModalContext.Provider value={state}>
-                <ModalActiveContext.Provider value={action}>
+            <ModalStateContext.Provider value={state}>
+                <ModalMethodsContext.Provider value={action}>
                     {children}
-                </ModalActiveContext.Provider>
-            </ModalContext.Provider>
+                </ModalMethodsContext.Provider>
+            </ModalStateContext.Provider>
         )
     }
     return ({
-        ModalContext,
-        ModalActiveContext,
+        ModalStateContext,
+        ModalMethodsContext,
         ModalProvider,
     })
 }
