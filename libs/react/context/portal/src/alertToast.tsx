@@ -1,23 +1,39 @@
-import { createContext, ReactNode } from 'react';
-import { useAlertToast } from '@bugofbook/react/hook/feedback';
-import { alertToastState, initAlertToastState } from '@bugofbook/react/reducer/feedback';
+import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
+import { alertToastState, initializeAlertToastState, alertToastReducer, alertInitialStateProps, AlertToastSetProps, createAlertToastAction } from '@bugofbook/react/reducer/feedback';
 
-export function createAlertToastContext<T extends Record<string, any>>() {
-    const AlertToastStateContext = createContext<alertToastState<T>>(initAlertToastState<T>(false));
-    const AlertToastMethodsContext = createContext({open : (prop: T) => {return;}, close: () => {return;}});
-    const AlertToastProvider = ({children}: {children: ReactNode}) => {
-        const [state, actions] = useAlertToast<T>({initOpen: false});
+export type AlertToastComponent<T extends Record<string, unknown>> = alertToastState<T> & {
+    onClose?: () => unknown,
+}
+
+type AlertToastContextProps<T extends Record<string, unknown>> = {
+    modal: FunctionComponent<AlertToastComponent<T>>,
+}
+export function createAlertToastContext<T extends Record<string, unknown>>({modal}: AlertToastContextProps<T>) {
+    const AlertToastComponent = modal
+    const OpenAlertToastContext = createContext((prop: AlertToastSetProps<T>) => {return;})
+    const AlertToastProvider = ({children, initialState}: PropsWithChildren<{initialState: alertInitialStateProps<T>}>) => {
+        const [state, dispatch] = useReducer(alertToastReducer, initializeAlertToastState<T>(initialState))
+        const open = useCallback((config: AlertToastSetProps<T>) => {
+            dispatch(createAlertToastAction.setConfig(config));
+            requestAnimationFrame(() => {
+                dispatch(createAlertToastAction.open());
+            });
+        }, [])
+        const close = useCallback(() => {
+            dispatch(createAlertToastAction.close());
+            requestAnimationFrame(() => {
+                dispatch(createAlertToastAction.clearConfig());
+            });
+        }, [])
         return (
-            <AlertToastStateContext.Provider value={state}>
-                <AlertToastMethodsContext.Provider value={actions}>
-                    { children}
-                </AlertToastMethodsContext.Provider>
-            </AlertToastStateContext.Provider>
+            <OpenAlertToastContext.Provider value={open}>
+                { children}
+                <AlertToastComponent {...state} onClose={close} />
+            </OpenAlertToastContext.Provider>
         )
     }
     return ({
-        AlertToastStateContext,
-        AlertToastMethodsContext,
+        OpenAlertToastContext,
         AlertToastProvider,
     })
 }

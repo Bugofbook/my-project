@@ -55,6 +55,8 @@
         "libs/isomorphic/file/write/exceljs/src/index.ts"
       ],
       "@bugofbook/isomorphic2/file": ["libs/isomorphic2/file/src/index.ts"],
+      "@bugofbook/mui/joy/feedback": ["libs/mui/joy/feedback/src/index.ts"],
+      "@bugofbook/muifeedback": ["libs/mui/feedback/src/index.ts"],
       "@bugofbook/react/content": ["libs/react/content/text/src/index.ts"],
       "@bugofbook/react/content/system": [
         "libs/react/content/system/src/index.ts"

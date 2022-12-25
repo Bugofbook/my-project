@@ -1,10 +1,10 @@
 import { Reducer } from "react";
-import { state, openAction, closeAction, setConfigAction, clearConfigAction} from './core'
+import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
-type modalAction<T extends Record<string, any>> = openAction | closeAction | setConfigAction<T> | clearConfigAction;
-export type modalState<T extends Record<string, any>> = state<T>;
-export type modalReducer<T extends Record<string, any>> = Reducer<state<T>, modalAction<T>>;
-export function modalReducer<T extends Record<string, any>>(state: state<T>, action: modalAction<T>): state<T> {
+type ModalAction<T extends Record<string, unknown>> = OpenAction | CloseAction | SetConfigAction<T> | ClearConfigAction;
+export type ModalState<T extends Record<string, unknown>> = State<T>;
+export type modalReducer<T extends Record<string, unknown>> = Reducer<State<T>, ModalAction<T>>;
+export function modalReducer<T extends Record<string, unknown>>(state: State<T>, action: ModalAction<T>): State<T> {
     switch (action.type) {
         case 'open': {
             return ({
@@ -19,9 +19,10 @@ export function modalReducer<T extends Record<string, any>>(state: state<T>, act
             })
         }
         case 'setConfig': {
+            const {type, ...others} = action
             return ({
                 ...state,
-                config: action.config,
+                ...others,
             })
         }
         case 'clearConfig': {
@@ -34,29 +35,28 @@ export function modalReducer<T extends Record<string, any>>(state: state<T>, act
         }
     }
 }
-
-export function initModalState<T extends Record<string, any>>(initOpen: boolean): state<T> {
-    return ({
-        open: initOpen,
-    })
+export type ModalInitialProps<T extends Record<string, unknown>> = InitialProps<T>
+export function initializeModalState<T extends Record<string, unknown>>(prop: ModalInitialProps<T>): ModalState<T> {
+    return prop
 }
-function createOpenAction(): openAction {
+function createOpenAction(): OpenAction {
     return ({
         type: 'open',
     })
 }
-function createCloseAction(): closeAction {
+function createCloseAction(): CloseAction {
     return ({
         type: 'close',
     })
 }
-function createSetConfigAction<T extends Record<string, any>>(config: T): setConfigAction<T> {
+export type ModalSetProps<T extends Record<string, unknown>> = SetProps<T>
+function createSetConfigAction<T extends Record<string, unknown>>(config: ModalSetProps<T>): SetConfigAction<T> {
     return ({
         type: 'setConfig',
-        config,
+        ...config,
     })
 }
-function createClearConfigAction(): clearConfigAction {
+function createClearConfigAction(): ClearConfigAction {
     return ({
         type: 'clearConfig',
     })

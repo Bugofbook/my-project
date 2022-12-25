@@ -1,39 +1,35 @@
 import { Outlet } from 'react-router-dom';
-
 import { createModalContext, createAlertDialogContext, createAlertToastContext, createYesnoDialogContext, createYesnocancelDialogContext } from "@bugofbook/react/context/portal";
+import { ModalComponent, AlertDialogComponent, YesnoDialogComponent, YesnocancelDialogComponent } from "@bugofbook/mui/joy/feedback";
 
-const ModalContext = createModalContext();
+const ModalContext = createModalContext({modal: ModalComponent});
 const ModalProvider = ModalContext.ModalProvider;
-export const ModalStateContext = ModalContext.ModalStateContext
-export const ModalMethodsContext = ModalContext.ModalMethodsContext
-const AlertDialogContext = createAlertDialogContext();
+export const OpenModalContext = ModalContext.OpenModalContext
+const AlertDialogContext = createAlertDialogContext({modal: AlertDialogComponent});
 const AlertDialogProvider = AlertDialogContext.AlertDialogProvider;
-export const AlertDialogStateContext = AlertDialogContext.AlertDialogStateContext
-export const AlertDialogMethodsContext = AlertDialogContext.AlertDialogMethodsContext
-const AlertToastContext = createAlertToastContext();
-const AlertToastProvider = AlertToastContext.AlertToastProvider;
-export const AlertToastStateContext = AlertToastContext.AlertToastStateContext
-export const AlertToastMethodsContext = AlertToastContext.AlertToastMethodsContext
-const YesnoDialogContext = createYesnoDialogContext();
+export const OpenAlertDialogStateContext = AlertDialogContext.OpenAlertDialogContext
+// const AlertToastContext = createAlertToastContext();
+// const AlertToastProvider = AlertToastContext.AlertToastProvider;
+// export const AlertToastStateContext = AlertToastContext.AlertToastStateContext
+// export const AlertToastMethodsContext = AlertToastContext.AlertToastMethodsContext
+const YesnoDialogContext = createYesnoDialogContext({modal: YesnoDialogComponent});
 const YesnoDialogProvider = YesnoDialogContext.YesnoDialogProvider;
-export const YesnoDialogStateContext = YesnoDialogContext.YesnoDialogStateContext
-export const YesnoDialogMethodsContext = YesnoDialogContext.YesnoDialogMethodsContext
-const YesnocancelDialogContext = createYesnocancelDialogContext();
+export const OpenYesnoDialogStateContext = YesnoDialogContext.OpenYesnoDialogContext
+const YesnocancelDialogContext = createYesnocancelDialogContext({modal: YesnocancelDialogComponent});
 const YesnocancelDialogProvider = YesnocancelDialogContext.YesnocancelDialogProvider;
-export const YesnocancelDialogStateContext = YesnocancelDialogContext.YesnocancelDialogStateContext
-export const YesnocancelDialogMethodsContext = YesnocancelDialogContext.YesnocancelDialogMethodsContext
+export const OpenYesnocancelDialogStateContext = YesnocancelDialogContext.OpenYesnocancelDialogContext
 
 export const GlobalProvider = () => {
     return (
-        <ModalProvider>
-            <AlertDialogProvider>
-                <AlertToastProvider>
-                    <YesnoDialogProvider>
-                        <YesnocancelDialogProvider>
+        <ModalProvider initState={{open: false}}>
+            <AlertDialogProvider initState={{open: false}}>
+                {/* <AlertToastProvider> */}
+                    <YesnoDialogProvider initialState={{open: false}}>
+                        <YesnocancelDialogProvider initialState={{open: false}}>
                             <Outlet />
                         </YesnocancelDialogProvider>
                     </YesnoDialogProvider>
-                </AlertToastProvider>
+                {/* </AlertToastProvider> */}
             </AlertDialogProvider>
         </ModalProvider>
     )

@@ -1,23 +1,41 @@
-import { createContext, ReactNode } from 'react';
-import { useModal } from '@bugofbook/react/hook/feedback'
-import { modalState, initModalState } from '@bugofbook/react/reducer/feedback'
+import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
+import { modalReducer, initializeModalState, createModalAction, ModalInitialProps, ModalSetProps, ModalState } from '@bugofbook/react/reducer/feedback'
 
-export function createModalContext<T extends Record<string, any>>() {
-    const ModalStateContext = createContext<modalState<T>>(initModalState<T>(false));
-    const ModalMethodsContext = createContext({open : (prop: T) => {return;}, close: () => {return;}});
-    const ModalProvider = ({children}: {children: ReactNode}) => {
-        const [state, action] = useModal<T>({initOpen: false});
+export type ModalComponentProps<T extends Record<string, unknown>> = ModalState<T> & {
+    onClose: (prop: unknown) => unknown,
+}
+
+type ModalContextProps<T extends Record<string, unknown>> = {
+    modal: FunctionComponent<ModalComponentProps<T>>,
+}
+export function createModalContext<T extends Record<string, unknown>>({modal}: ModalContextProps<T>) {
+    const ModalComponent = modal
+    const OpenModalContext = createContext<(prop?: ModalSetProps<T>) => void>(() => {return;});
+    const ModalProvider = ({children, initState}: PropsWithChildren<{initState: ModalInitialProps<T>}>) => {
+        const [state, dispatch] = useReducer<modalReducer<T>>(modalReducer, initializeModalState<T>(initState));
+        const open = useCallback((config?: ModalSetProps<T>) => {
+            if (config) {
+                dispatch(createModalAction.setConfig(config));
+            }
+            requestAnimationFrame(() => {
+                dispatch(createModalAction.open());
+            });
+        }, [dispatch]);
+        const close = useCallback(() => {
+            dispatch(createModalAction.clearConfig());
+            requestAnimationFrame(() => {
+                dispatch(createModalAction.close());
+            });
+        }, [dispatch]);
         return (
-            <ModalStateContext.Provider value={state}>
-                <ModalMethodsContext.Provider value={action}>
-                    {children}
-                </ModalMethodsContext.Provider>
-            </ModalStateContext.Provider>
+            <OpenModalContext.Provider value={open}>
+                {children}
+                <ModalComponent {...state} onClose={close} />
+            </OpenModalContext.Provider>
         )
     }
-    return ({
-        ModalStateContext,
-        ModalMethodsContext,
+    return {
         ModalProvider,
-    })
+        OpenModalContext,
+    }
 }

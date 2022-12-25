@@ -1,0 +1,44 @@
+{
+  "name": "mui--feedback",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/mui/feedback/src",
+  "projectType": "library",
+  "tags": ["react", "mui"],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/mui//feedback",
+        "tsConfig": "libs/mui/feedback/tsconfig.lib.json",
+        "project": "libs/mui/feedback/package.json",
+        "entryFile": "libs/mui/feedback/src/index.ts",
+        "external": ["@emotion/react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/mui/feedback/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/mui/feedback/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/mui/feedback/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

@@ -1,25 +1,37 @@
-import { useReducer, useMemo } from "react";
-import { alertDialogReducer, initAlertDialogState, createAlertDialogAction, useProps, alertDialogState } from '@bugofbook/react/reducer/feedback'
+import { useReducer, useCallback } from "react";
+import { alertDialogReducer, initializeAlertDialogState, createAlertDialogAction, alertToastState, alertDialogState } from '@bugofbook/react/reducer/feedback'
 
-export function useAlertDialog<T extends Record<string, any>>({initOpen}: useProps): [alertDialogState<T>, {open: (config: T) => void, close: () => void}] {
-    const [state, dispatch] =  useReducer<alertDialogReducer<T>>(alertDialogReducer, initAlertDialogState(initOpen));
-    const action = useMemo(() => {
-        const open = (config: T) => {
+export function useAlertDialog<T extends Record<string, unknown>>(prop: alertToastState<T>): {
+    state: alertDialogState<T>,
+    onOpen: (config?: T) => void,
+    onClose: () => void,
+    onConfirm: (prop?: unknown) => void,
+} {
+    const [state, dispatch] =  useReducer<alertDialogReducer<T>>(alertDialogReducer, initializeAlertDialogState(prop));
+    const onOpen = useCallback((config?: T) => {
+        if (config) {
             dispatch(createAlertDialogAction.setConfig(config));
-            requestAnimationFrame(() => {
-                dispatch(createAlertDialogAction.open());
-            });
         }
-        const close = () => {
-            dispatch(createAlertDialogAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createAlertDialogAction.close());
-            });
-        }
-        return {
-            open,
-            close,
-        }
+        requestAnimationFrame(() => {
+            dispatch(createAlertDialogAction.open());
+        });
     }, []);
-    return [state, action]
+    const onClose = useCallback(() => {
+        dispatch(createAlertDialogAction.close());
+        requestAnimationFrame(() => {
+            dispatch(createAlertDialogAction.clearConfig());
+        });
+    }, []);
+    const onConfirm = useCallback((prop?: unknown) => {
+        if (state.onConfirm) {
+            state.onConfirm(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    return ({
+        state,
+        onOpen,
+        onClose,
+        onConfirm,
+    })
 }

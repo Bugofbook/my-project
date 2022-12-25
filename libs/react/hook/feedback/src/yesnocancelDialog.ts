@@ -1,25 +1,53 @@
-import { useReducer, useMemo } from "react";
-import { yesnocancelDialogReducer, initYesnocancelDialogState, createAlertToastAction, yesnocancelDialogState, useProps } from "@bugofbook/react/reducer/feedback";
+import { useReducer, useCallback } from "react";
+import { yesnocancelDialogReducer, initializeYesnocancelDialogState, createAlertToastAction, yesnocancelDialogState, SetConfigYesnoDialogProps } from "@bugofbook/react/reducer/feedback";
 
-export function useYesnocancelDialog<T extends Record<string, any>>({initOpen}: useProps): [yesnocancelDialogState<T>, {open: (config: T) => void, close: () => void}] {
-    const [state, dispatch] =  useReducer<yesnocancelDialogReducer<T>>(yesnocancelDialogReducer, initYesnocancelDialogState(initOpen));
-    const action = useMemo(() => {
-        const open = (prop: T) => {
-            dispatch(createAlertToastAction.setConfig(prop));
-            requestAnimationFrame(() => {
-                dispatch(createAlertToastAction.open());
-            });
+export function useYesnocancelDialog<T extends Record<string, unknown>>(initialProp: yesnocancelDialogState<T>): {
+    state: yesnocancelDialogState<T>,
+    onOpen: (config?: SetConfigYesnoDialogProps<T>) => void,
+    onClose: () => void,
+    onYes: (prop?: unknown) => void,
+    onNo: (prop?: unknown) => void,
+    onCancel: (prop?: unknown) => void,
+} {
+    const [state, dispatch] =  useReducer<yesnocancelDialogReducer<T>>(yesnocancelDialogReducer, initializeYesnocancelDialogState(initialProp));
+    const onOpen = useCallback((config?: SetConfigYesnoDialogProps<T>) => {
+        if (config) {
+            dispatch(createAlertToastAction.setConfig(config));
         }
-        const close = () => {
-            dispatch(createAlertToastAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createAlertToastAction.close());
-            });
-        }
-        return {
-            open,
-            close,
-        }
+        requestAnimationFrame(() => {
+            dispatch(createAlertToastAction.open());
+        });
     }, []);
-    return [state, action]
+    const onClose = useCallback(() => {
+        dispatch(createAlertToastAction.clearConfig());
+        requestAnimationFrame(() => {
+            dispatch(createAlertToastAction.close());
+        });
+    }, []);
+    const onYes = useCallback((prop?: unknown) => {
+        if (state.onYes) {
+            state.onYes(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    const onNo = useCallback((prop?: unknown) => {
+        if (state.onNo) {
+            state.onNo(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    const onCancel = useCallback((prop?: unknown) => {
+        if (state.onCancel) {
+            state.onCancel(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    return ({
+        state,
+        onOpen,
+        onClose,
+        onYes,
+        onNo,
+        onCancel,
+    })
 }

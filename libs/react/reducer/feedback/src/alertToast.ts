@@ -1,15 +1,15 @@
 import { Reducer } from "react";
-import { state, openAction, closeAction, setConfigAction, clearConfigAction} from './core'
+import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type alertToastAppendKey = 'toastType'| 'title' | 'content'
-export type alertToastState<T extends Record<string, any>> = state<T> & Partial<Record<alertToastAppendKey, string>>
-type openAlertToastAction = openAction
-type closeAlertToastAction = closeAction;
-type setConfigAlertToastAction<T extends Record<string, any>> = setConfigAction<T> & Partial<Record<alertToastAppendKey, string>>
-type clearConfigAlertToastAction = clearConfigAction;
-type alertToastAction<T extends Record<string, any>> = openAlertToastAction | closeAlertToastAction | setConfigAlertToastAction<T> | clearConfigAlertToastAction;
-export type alertToastReducer<T extends Record<string, any>> = Reducer<alertToastState<T>, alertToastAction<T>>;
-export function alertToastReducer<T extends Record<string, any>>(state: alertToastState<T>, action: alertToastAction<T>): alertToastState<T> {
+export type alertToastState<T extends Record<string, unknown>> = State<T> & Partial<Record<alertToastAppendKey, string>>
+type openAlertToastAction = OpenAction
+type closeAlertToastAction = CloseAction;
+type setConfigAlertToastAction<T extends Record<string, unknown>> = SetConfigAction<T> & Partial<Record<alertToastAppendKey, string>>
+type clearConfigAlertToastAction = ClearConfigAction;
+type alertToastAction<T extends Record<string, unknown>> = openAlertToastAction | closeAlertToastAction | setConfigAlertToastAction<T> | clearConfigAlertToastAction;
+export type alertToastReducer<T extends Record<string, unknown>> = Reducer<alertToastState<T>, alertToastAction<T>>;
+export function alertToastReducer<T extends Record<string, unknown>>(state: alertToastState<T>, action: alertToastAction<T>): alertToastState<T> {
     switch (action.type) {
         case 'open': {
             return ({
@@ -24,12 +24,10 @@ export function alertToastReducer<T extends Record<string, any>>(state: alertToa
             })
         }
         case 'setConfig': {
+            const {type, ...others} = action
             return ({
                 ...state,
-                config: action.config,
-                toastType: action.toastType,
-                title: action.title,
-                content: action.content,
+                ...others,
             })
         }
         case 'clearConfig': {
@@ -42,10 +40,9 @@ export function alertToastReducer<T extends Record<string, any>>(state: alertToa
         }
     }
 }
-export function initAlertToastState<T extends Record<string, any>>(initOpen: boolean): alertToastState<T> {
-    return ({
-        open: initOpen,
-    })
+export type alertInitialStateProps<T extends Record<string, unknown>> = InitialProps<T> & Partial<Record<alertToastAppendKey, string>>
+export function initializeAlertToastState<T extends Record<string, unknown>>(prop: InitialProps<T>): alertToastState<T> {
+    return prop
 }
 function createOpenAction(): openAlertToastAction {
     return ({
@@ -57,13 +54,11 @@ function createCloseAction(): closeAlertToastAction {
         type: 'close',
     })
 }
-function createSetConfigAction<T extends Record<string, any>>({config, toastType, title, content}: {config?: T, toastType?: string, title?: string, content?: string}): setConfigAlertToastAction<T> {
+export type AlertToastSetProps<T extends Record<string, unknown>> = SetProps<T> & Partial<Record<alertToastAppendKey, string>>
+function createSetConfigAction<T extends Record<string, unknown>>(prop: AlertToastSetProps<T>): setConfigAlertToastAction<T> {
     return ({
         type: 'setConfig',
-        config,
-        toastType,
-        title,
-        content,
+        ...prop,
     })
 }
 function createClearConfigAction(): clearConfigAlertToastAction {

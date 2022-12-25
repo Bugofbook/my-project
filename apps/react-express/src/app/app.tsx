@@ -1,28 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Message } from '@my-project/api-interfaces';
+import { GlobalProvider } from '../context/Global';
+import Layout from '../layout/Global';
+import HomePage from '../page/home';
+import ModalPage from '../page/modal';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <GlobalProvider />,
+    children: [
+      { 
+        path: '/',
+        element: <Layout />,
+        children: [
+          { path: '/', element: <HomePage /> },
+          { path: '/modal', element: <ModalPage /> },
+        ]
+      }
+    ],
+  }
+])
 
-  useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
-      .then(setMessage);
-  }, []);
-
-  return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to react-express!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Fast and Extensible Build System"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
-  );
-};
-
+const App = () => (<RouterProvider router={router} />)
 export default App;

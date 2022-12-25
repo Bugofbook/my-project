@@ -1,23 +1,23 @@
 import { Reducer } from "react";
-import { state, openAction, closeAction, setConfigAction, clearConfigAction} from './core'
+import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type yesnoDialogAppendKey = 'title' | 'content' | 'yesText' | 'noText';
-type yesDialogMethod = (prop: 'yes') => void;
-type noDialogMethod = (prop: 'no') => void;
-export type yesnoDialogState<T extends Record<string, any>> = state<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
+type yesDialogMethod = (prop: unknown) => unknown;
+type noDialogMethod = (prop: unknown) => unknown;
+export type YesnoDialogState<T extends Record<string, unknown>> = State<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
     onYes?: yesDialogMethod;
     onNo?: noDialogMethod;
 }
-type openYesnoDialogAction = openAction
-type closeYesnoDialogAction = closeAction;
-type setConfigYesnoDialogAction<T extends Record<string, any>> = setConfigAction<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
+type openYesnoDialogAction = OpenAction
+type closeYesnoDialogAction = CloseAction;
+type setConfigYesnoDialogAction<T extends Record<string, unknown>> = SetConfigAction<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
     onYes?: yesDialogMethod;
     onNo?: noDialogMethod;
 }
-type clearConfigYesnoDialogAction = clearConfigAction;
-type yesnoDialogAction<T extends Record<string, any>> = openYesnoDialogAction | closeYesnoDialogAction | setConfigYesnoDialogAction<T> | clearConfigYesnoDialogAction;
-export type yesnoDialogReducer<T extends Record<string, any>> = Reducer<yesnoDialogState<T>, yesnoDialogAction<T>>;
-export function yesnoDialogReducer<T extends Record<string, any>>(state: yesnoDialogState<T>, action: yesnoDialogAction<T>): yesnoDialogState<T> {
+type clearConfigYesnoDialogAction = ClearConfigAction;
+type yesnoDialogAction<T extends Record<string, unknown>> = openYesnoDialogAction | closeYesnoDialogAction | setConfigYesnoDialogAction<T> | clearConfigYesnoDialogAction;
+export type yesnoDialogReducer<T extends Record<string, unknown>> = Reducer<YesnoDialogState<T>, yesnoDialogAction<T>>;
+export function yesnoDialogReducer<T extends Record<string, unknown>>(state: YesnoDialogState<T>, action: yesnoDialogAction<T>): YesnoDialogState<T> {
     switch (action.type) {
         case 'open': {
             return ({
@@ -32,15 +32,10 @@ export function yesnoDialogReducer<T extends Record<string, any>>(state: yesnoDi
             })
         }
         case 'setConfig': {
+            const {type, ...others} = action
             return ({
                 ...state,
-                config: action.config,
-                title: action.title,
-                content: action.content,
-                yesText: action.yesText,
-                noText: action.noText,
-                onYes: action.onYes,
-                onNo: action.onNo,
+                ...others,
             })
         }
         case 'clearConfig': {
@@ -53,10 +48,12 @@ export function yesnoDialogReducer<T extends Record<string, any>>(state: yesnoDi
         }
     }
 }
-export function initYesnoDialogState<T extends Record<string, any>>(initOpen: boolean): yesnoDialogState<T> {
-    return ({
-        open: initOpen,
-    })
+export type YesnoDialogInitialProps<T extends Record<string, unknown>> = InitialProps<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
+    onYes?: yesDialogMethod;
+    onNo?: noDialogMethod;
+}
+export function initializeYesnoDialogState<T extends Record<string, unknown>>(prop: InitialProps<T>): YesnoDialogState<T> {
+    return prop
 }
 function createOpenAction(): openYesnoDialogAction {
     return ({
@@ -68,16 +65,14 @@ function createCloseAction(): closeYesnoDialogAction {
         type: 'close',
     })
 }
-function createSetConfigAction<T extends Record<string, any>>({config, title, content, yesText, noText, onYes, onNo}: {config?: T, title?: string, content?: string, yesText?: string, noText?: string, onYes?: yesDialogMethod, onNo?: noDialogMethod}): setConfigYesnoDialogAction<T> {
+export type SetConfigYesnoDialogProps<T extends Record<string, unknown>> = SetProps<T> & Partial<Record<yesnoDialogAppendKey, string>> & {
+    onYes?: yesDialogMethod;
+    onNo?: noDialogMethod;
+}
+function createSetConfigAction<T extends Record<string, unknown>>(prop: SetConfigYesnoDialogProps<T>): setConfigYesnoDialogAction<T> {
     return ({
         type: 'setConfig',
-        config,
-        title,
-        content,
-        yesText,
-        noText,
-        onYes,
-        onNo,
+        ...prop
     })
 }
 function createClearConfigAction(): clearConfigYesnoDialogAction {

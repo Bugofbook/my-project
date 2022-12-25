@@ -1,20 +1,20 @@
 import { Reducer } from "react";
-import { state, openAction, closeAction, setConfigAction, clearConfigAction} from './core'
+import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type alertDialogAppendKey = 'title' | 'content' | 'confirmText';
-type alertDialogMethod = (prop: string) => void;
-export type alertDialogState<T extends Record<string, any>> = state<T> & Partial<Record<alertDialogAppendKey, string>> & {
+type alertDialogMethod = (prop: unknown) => unknown;
+export type alertDialogState<T extends Record<string, unknown>> = State<T> & Partial<Record<alertDialogAppendKey, string>> & {
     onConfirm?: alertDialogMethod;
 }
-type openAlertDialogAction = openAction
-type closeAlertDialogAction = closeAction;
-type setConfigAlertDialogAction<T extends Record<string, any>> = setConfigAction<T> & Partial<Record<alertDialogAppendKey, string>> & {
+type openAlertDialogAction = OpenAction
+type closeAlertDialogAction = CloseAction;
+type setConfigAlertDialogAction<T extends Record<string, unknown>> = SetConfigAction<T> & Partial<Record<alertDialogAppendKey, string>> & {
     onConfirm?: alertDialogMethod;
 }
-type clearConfigAlertDialogAction = clearConfigAction;
-type alertDialogAction<T extends Record<string, any>> = openAlertDialogAction | closeAlertDialogAction | setConfigAlertDialogAction<T> | clearConfigAlertDialogAction;
-export type alertDialogReducer<T extends Record<string, any>> = Reducer<alertDialogState<T>, alertDialogAction<T>>;
-export function alertDialogReducer<T extends Record<string, any>>(state: alertDialogState<T>, action: alertDialogAction<T>): alertDialogState<T> {
+type clearConfigAlertDialogAction = ClearConfigAction;
+type alertDialogAction<T extends Record<string, unknown>> = openAlertDialogAction | closeAlertDialogAction | setConfigAlertDialogAction<T> | clearConfigAlertDialogAction;
+export type alertDialogReducer<T extends Record<string, unknown>> = Reducer<alertDialogState<T>, alertDialogAction<T>>;
+export function alertDialogReducer<T extends Record<string, unknown>>(state: alertDialogState<T>, action: alertDialogAction<T>): alertDialogState<T> {
     switch (action.type) {
         case 'open': {
             return ({
@@ -29,13 +29,10 @@ export function alertDialogReducer<T extends Record<string, any>>(state: alertDi
             })
         }
         case 'setConfig': {
+            const {type, ...others} = action
             return ({
                 ...state,
-                config: action.config,
-                title: action.title,
-                content: action.content,
-                confirmText: action.confirmText,
-                onConfirm: action.onConfirm,
+                ...others,
             })
         }
         case 'clearConfig': {
@@ -48,10 +45,11 @@ export function alertDialogReducer<T extends Record<string, any>>(state: alertDi
         }
     }
 }
-export function initAlertDialogState<T extends Record<string, any>>(initOpen: boolean): alertDialogState<T> {
-    return ({
-        open: initOpen,
-    })
+export type AlertDialogInitialProps<T extends Record<string, unknown>> = InitialProps<T> & Partial<Record<alertDialogAppendKey, string>> & {
+    onConfirm?: alertDialogMethod;
+}
+export function initializeAlertDialogState<T extends Record<string, unknown>>(prop: AlertDialogInitialProps<T>): alertDialogState<T> {
+    return prop
 }
 function createOpenAction(): openAlertDialogAction {
     return ({
@@ -63,31 +61,19 @@ function createCloseAction(): closeAlertDialogAction {
         type: 'close',
     })
 }
-function createSetConfigAction<T extends Record<string, any>>({title, content, confirmText, onConfirm, config}: {title?: string, content?: string, confirmText?: string, onConfirm?: alertDialogMethod, config?: T}): setConfigAlertDialogAction<T> {
-    if (config) {
-        return ({
-            type: 'setConfig',
-            title,
-            content,
-            confirmText,
-            onConfirm,
-            config
-        })
-    } else {
-        return ({
-            type: 'setConfig',
-            title,
-            content,
-            confirmText,
-            onConfirm,
-        })
-    }
+export type AlertDialogSetProps<T extends Record<string, unknown>> = SetProps<T> & Partial<Record<alertDialogAppendKey, string>>
+function createSetConfigAction<T extends Record<string, unknown>>(prop: AlertDialogSetProps<T>): setConfigAlertDialogAction<T> {
+    return ({
+        type: 'setConfig',
+        ...prop,
+    })
 }
 function createClearConfigAction(): clearConfigAlertDialogAction {
     return ({
         type: 'clearConfig',
     })
 }
+
 export const createAlertDialogAction = {
     open: createOpenAction,
     close: createCloseAction,

@@ -1,10 +1,11 @@
 import { useContext, useEffect } from "react"
 import { useNavigate, useNavigation } from 'react-router-dom';
-import { ThemeProvider } from '@mui/material/styles'
+// import { ThemeProvider } from '@mui/material/styles'
+import { CssVarsProvider } from '@mui/joy/styles';
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container'
 import { Outlet } from "react-router-dom";
-import theme from '../theme/global'
+// import theme from '../theme/global'
 import CssBaseline from '@mui/material/CssBaseline'
 
 // import { AuthContent, AuthDispatchContent, AuthCreateAction, OpenLoadingDropContent, CloseLoadingDropContent } from "@ez-admin/custom/content";
@@ -28,12 +29,12 @@ const Layout = () => {
     // // eslint-disable-next-line react-hooks/exhaustive-deps
     // }, [navigation.state])
     return (
-        <ThemeProvider theme={theme}>
+        <CssVarsProvider>
             <CssBaseline />
             <LayoutContainer maxWidth={false} disableGutters sx={{overflowY: 'scroll'}}>
                 <Outlet />
             </LayoutContainer>
-        </ThemeProvider>
+        </CssVarsProvider>
     )
 }
 

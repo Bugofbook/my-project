@@ -1,25 +1,45 @@
-import { useReducer, useMemo } from "react";
-import { yesnoDialogReducer, initYesnoDialogState, createYesnoDialogAction, yesnoDialogState, useProps } from '@bugofbook/react/reducer/feedback'
+import { useReducer, useCallback } from "react";
+import { yesnoDialogReducer, initializeYesnoDialogState, createYesnoDialogAction, YesnoDialogState, SetConfigYesnoDialogProps } from '@bugofbook/react/reducer/feedback'
 
-export function useYesnoDialog<T extends Record<string, any>>({initOpen}: useProps): [yesnoDialogState<T>, {open: (config: T) => void, close: () => void}] {
-    const [state, dispatch] =  useReducer<yesnoDialogReducer<T>>(yesnoDialogReducer, initYesnoDialogState(initOpen));
-    const action = useMemo(() => {
-        const open = (prop: T) => {
-            dispatch(createYesnoDialogAction.setConfig(prop));
-            requestAnimationFrame(() => {
-                dispatch(createYesnoDialogAction.open());
-            });
+export function useYesnoDialog<T extends Record<string, unknown>>(initialProps: YesnoDialogState<T>): {
+    state: YesnoDialogState<T>,
+    onOpen: (props?: SetConfigYesnoDialogProps<T>) => void,
+    onClose: () => void,
+    onYes: (prop?: unknown) => void,
+    onNo: (prop?: unknown) => void,
+} {
+    const [state, dispatch] =  useReducer<yesnoDialogReducer<T>>(yesnoDialogReducer, initializeYesnoDialogState(initialProps));
+    const onOpen = useCallback((props?: SetConfigYesnoDialogProps<T>) => {
+        if (props) {
+            dispatch(createYesnoDialogAction.setConfig(props));
         }
-        const close = () => {
-            dispatch(createYesnoDialogAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createYesnoDialogAction.close());
-            });
-        }
-        return {
-            open,
-            close,
-        }
+        requestAnimationFrame(() => {
+            dispatch(createYesnoDialogAction.open());
+        });
     }, []);
-    return [state, action]
+    const onClose = useCallback(() => {
+        dispatch(createYesnoDialogAction.close());
+        requestAnimationFrame(() => {
+            dispatch(createYesnoDialogAction.clearConfig());
+        });
+    }, []);
+    const onYes = useCallback((prop?: unknown) => {
+        if (state.onYes) {
+            state.onYes(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    const onNo = useCallback((prop?: unknown) => {
+        if (state.onNo) {
+            state.onNo(prop);
+        }
+        onClose()
+    }, [state, onClose]);
+    return ({
+        state,
+        onOpen,
+        onClose,
+        onYes,
+        onNo,
+    })
 }

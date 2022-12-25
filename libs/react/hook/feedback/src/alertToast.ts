@@ -1,25 +1,29 @@
-import { useReducer, useMemo } from "react";
-import { alertToastReducer, initAlertToastState, createAlertToastAction, alertToastState, useProps } from '@bugofbook/react/reducer/feedback'
+import { useReducer, useCallback } from "react";
+import { alertToastReducer, initializeAlertToastState, createAlertToastAction, alertToastState, AlertToastSetProps } from '@bugofbook/react/reducer/feedback'
 
-export function useAlertToast<T extends Record<string, any>>({initOpen}: useProps): [alertToastState<T>, {open: (config: T) => void, close: () => void}] {
-    const [state, dispatch] =  useReducer<alertToastReducer<T>>(alertToastReducer, initAlertToastState(initOpen));
-    const action = useMemo(() => {
-        const open = ({config, toastType, title, content}: {config?: T, toastType?: string, title?:string, content?:string } = {}) => {
-            dispatch(createAlertToastAction.setConfig({config, toastType, title, content}));
-            requestAnimationFrame(() => {
-                dispatch(createAlertToastAction.open());
-            });
+export function useAlertToast<T extends Record<string, unknown>>(prop: alertToastState<T>): {
+    state: alertToastState<T>,
+    onOpen: (config?: AlertToastSetProps<T>) => void,
+    onClose: () => void,
+} {
+    const [state, dispatch] =  useReducer<alertToastReducer<T>>(alertToastReducer, initializeAlertToastState(prop));
+    const onOpen = useCallback((config?: AlertToastSetProps<T>) => {
+        if (config) {
+            dispatch(createAlertToastAction.setConfig(config));
         }
-        const close = () => {
-            dispatch(createAlertToastAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createAlertToastAction.close());
-            });
-        }
-        return {
-            open,
-            close,
-        }
+        requestAnimationFrame(() => {
+            dispatch(createAlertToastAction.open());
+        });
     }, []);
-    return [state, action]
+    const onClose = useCallback(() => {
+        dispatch(createAlertToastAction.clearConfig());
+        requestAnimationFrame(() => {
+            dispatch(createAlertToastAction.close());
+        });
+    }, []);
+    return ({
+        state,
+        onOpen,
+        onClose,
+    })
 }

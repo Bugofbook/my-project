@@ -1,27 +1,31 @@
-import { useReducer, useMemo } from "react";
-import { modalReducer, initModalState, createModalAction, useProps, modalState } from '@bugofbook/react/reducer/feedback'
+import { useReducer, useCallback } from "react";
+import { modalReducer, initializeModalState, createModalAction, ModalInitialProps, ModalSetProps, ModalState } from '@bugofbook/react/reducer/feedback'
 
 
-
-export function useModal<T extends Record<string, any>>({initOpen}: useProps): [modalState<T>, {open: (config: T) => void, close: () => void}] {
-    const [state, dispatch] = useReducer<modalReducer<T>>(modalReducer, initModalState<T>(initOpen));
-    const action = useMemo(() => {
-        const open = (config: T) => {
+export function useModal<T extends Record<string, unknown>>(initState: ModalInitialProps<T>): {
+    state: ModalState<T>,
+    onOpen: (config?: ModalSetProps<T>) => void,
+    onClose: () => void,
+} {
+    const [state, dispatch] = useReducer<modalReducer<T>>(modalReducer, initializeModalState<T>(initState));
+    const onOpen = useCallback((config?: ModalSetProps<T>) => {
+        if (config) {
             dispatch(createModalAction.setConfig(config));
-            requestAnimationFrame(() => {
-                dispatch(createModalAction.open());
-            });
         }
-        const close = () => {
-            dispatch(createModalAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createModalAction.close());
-            });
-        }
-        return {
-            open,
-            close,
-        }
+        requestAnimationFrame(() => {
+            dispatch(createModalAction.open());
+        });
     }, []);
-    return [state, action]
+    const onClose = useCallback(() => {
+        dispatch(createModalAction.clearConfig());
+        requestAnimationFrame(() => {
+            dispatch(createModalAction.close());
+        });
+    }, []);
+
+    return {
+        state,
+        onOpen,
+        onClose,
+    }
 }
