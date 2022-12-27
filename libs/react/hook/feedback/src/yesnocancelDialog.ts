@@ -5,6 +5,7 @@ export function useYesnocancelDialog<T extends Record<string, unknown>>(initialP
     state: yesnocancelDialogState<T>,
     onOpen: (config?: SetConfigYesnoDialogProps<T>) => void,
     onClose: () => void,
+    onClearConfig: () => void,
     onYes: (prop?: unknown) => void,
     onNo: (prop?: unknown) => void,
     onCancel: (prop?: unknown) => void,
@@ -19,10 +20,10 @@ export function useYesnocancelDialog<T extends Record<string, unknown>>(initialP
         });
     }, []);
     const onClose = useCallback(() => {
+        dispatch(createAlertToastAction.close());
+    }, []);
+    const onClearConfig = useCallback(() => {
         dispatch(createAlertToastAction.clearConfig());
-        requestAnimationFrame(() => {
-            dispatch(createAlertToastAction.close());
-        });
     }, []);
     const onYes = useCallback((prop?: unknown) => {
         if (state.onYes) {
@@ -46,6 +47,7 @@ export function useYesnocancelDialog<T extends Record<string, unknown>>(initialP
         state,
         onOpen,
         onClose,
+        onClearConfig,
         onYes,
         onNo,
         onCancel,

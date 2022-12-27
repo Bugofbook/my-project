@@ -3,6 +3,7 @@ import { modalReducer, initializeModalState, createModalAction, ModalInitialProp
 
 export type ModalComponentProps<T extends Record<string, unknown>> = ModalState<T> & {
     onClose: (prop: unknown) => unknown,
+    onClearConfig: () => unknown,
 }
 
 type ModalContextProps<T extends Record<string, unknown>> = {
@@ -23,14 +24,14 @@ export function createModalContext<T extends Record<string, unknown>>({modal}: M
         }, [dispatch]);
         const close = useCallback(() => {
             dispatch(createModalAction.clearConfig());
-            requestAnimationFrame(() => {
-                dispatch(createModalAction.close());
-            });
+        }, [dispatch]);
+        const clearConfig = useCallback(() => {
+            dispatch(createModalAction.clearConfig());
         }, [dispatch]);
         return (
             <OpenModalContext.Provider value={open}>
                 {children}
-                <ModalComponent {...state} onClose={close} />
+                <ModalComponent {...state} onClose={close} onClearConfig={clearConfig} />
             </OpenModalContext.Provider>
         )
     }

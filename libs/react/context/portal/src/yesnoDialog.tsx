@@ -2,6 +2,7 @@ import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCal
 import { YesnoDialogState, initializeYesnoDialogState, yesnoDialogReducer, YesnoDialogInitialProps, createYesnoDialogAction } from "@bugofbook/react/reducer/feedback";
 export type YesnoDialogComponent<T extends Record<string, unknown>> = YesnoDialogState<T> & {
     onClose?: () => unknown,
+    onClearConfig?: () => unknown,
     onYes?: (prop: unknown) => unknown,
     onNo?: (prop: unknown) => unknown,
 }
@@ -18,13 +19,13 @@ export function createYesnoDialogContext<T extends Record<string, unknown>>({mod
             requestAnimationFrame(() => {
                 dispatch(createYesnoDialogAction.open());
             });
-        }, [])
+        }, [dispatch])
         const close = useCallback(() => {
             dispatch(createYesnoDialogAction.close());
-            requestAnimationFrame(() => {
-                dispatch(createYesnoDialogAction.clearConfig());
-            });
-        }, [])
+        }, [dispatch])
+        const clearConfig = useCallback(() => {
+            dispatch(createYesnoDialogAction.clearConfig());
+        }, [dispatch])
         const yes = useCallback((prop: unknown) => {
             if (state.onYes) {
                 state.onYes(prop)
@@ -40,7 +41,7 @@ export function createYesnoDialogContext<T extends Record<string, unknown>>({mod
         return (
             <OpenYesnoDialogContext.Provider value={open}>
                 { children}
-                <YesnoDialogComponent {...state} onYes={yes} onNo={no} onClose={close} />
+                <YesnoDialogComponent {...state} onYes={yes} onNo={no} onClose={close} onClearConfig={clearConfig} />
             </OpenYesnoDialogContext.Provider>
         )        
     };

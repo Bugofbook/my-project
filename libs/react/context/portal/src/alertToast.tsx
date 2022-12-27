@@ -3,6 +3,7 @@ import { alertToastState, initializeAlertToastState, alertToastReducer, alertIni
 
 export type AlertToastComponent<T extends Record<string, unknown>> = alertToastState<T> & {
     onClose?: () => unknown,
+    onClearConfig?: () => unknown,
 }
 
 type AlertToastContextProps<T extends Record<string, unknown>> = {
@@ -18,17 +19,17 @@ export function createAlertToastContext<T extends Record<string, unknown>>({moda
             requestAnimationFrame(() => {
                 dispatch(createAlertToastAction.open());
             });
-        }, [])
+        }, [dispatch])
         const close = useCallback(() => {
             dispatch(createAlertToastAction.close());
-            requestAnimationFrame(() => {
-                dispatch(createAlertToastAction.clearConfig());
-            });
-        }, [])
+        }, [dispatch])
+        const clearConfig = useCallback(() => {
+            dispatch(createAlertToastAction.clearConfig());
+        }, [dispatch])
         return (
             <OpenAlertToastContext.Provider value={open}>
                 { children}
-                <AlertToastComponent {...state} onClose={close} />
+                <AlertToastComponent {...state} onClose={close} onClearConfig={clearConfig} />
             </OpenAlertToastContext.Provider>
         )
     }

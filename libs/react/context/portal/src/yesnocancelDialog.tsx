@@ -2,6 +2,7 @@ import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCal
 import { yesnocancelDialogState, initializeYesnocancelDialogState, yesnocancelDialogReducer, YesnocancelDialogInitialProps, YesnocancelDialogSetProps, createYesnocancelDialogAction } from "@bugofbook/react/reducer/feedback";
 export type YesnocancelDialogComponent<T extends Record<string, unknown>> = yesnocancelDialogState<T> & {
     onClose?: () => unknown,
+    onClearConfig?: () => unknown,
     onYes?: (prop: unknown) => unknown,
     onNo?: (prop: unknown) => unknown,
     onCancel?: (prop: unknown) => unknown,
@@ -19,13 +20,16 @@ export function createYesnocancelDialogContext<T extends Record<string, unknown>
             requestAnimationFrame(() => {
                 dispatch(createYesnocancelDialogAction.open());
             });
-        }, [])
+        }, [dispatch])
         const close = useCallback(() => {
             dispatch(createYesnocancelDialogAction.close());
             requestAnimationFrame(() => {
                 dispatch(createYesnocancelDialogAction.clearConfig());
             });
-        }, [])
+        }, [dispatch])
+        const clearConfig = useCallback(() => {
+            dispatch(createYesnocancelDialogAction.clearConfig());
+        }, [dispatch])
         const yes = useCallback((prop: unknown) => {
             if (state.onYes) {
                 state.onYes(prop)
@@ -47,7 +51,7 @@ export function createYesnocancelDialogContext<T extends Record<string, unknown>
         return (
             <OpenYesnocancelDialogContext.Provider value={open}>
                 { children}
-                <YesnocancelDialogComponent {...state} onYes={yes} onNo={no} onCancel={cancel} onClose={close} />
+                <YesnocancelDialogComponent {...state} onYes={yes} onNo={no} onCancel={cancel} onClose={close} onClearConfig={clearConfig} />
             </OpenYesnocancelDialogContext.Provider>
         )
     }

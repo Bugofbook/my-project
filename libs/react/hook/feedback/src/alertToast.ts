@@ -5,6 +5,7 @@ export function useAlertToast<T extends Record<string, unknown>>(prop: alertToas
     state: alertToastState<T>,
     onOpen: (config?: AlertToastSetProps<T>) => void,
     onClose: () => void,
+    onClearConfig: () => void,
 } {
     const [state, dispatch] =  useReducer<alertToastReducer<T>>(alertToastReducer, initializeAlertToastState(prop));
     const onOpen = useCallback((config?: AlertToastSetProps<T>) => {
@@ -17,13 +18,14 @@ export function useAlertToast<T extends Record<string, unknown>>(prop: alertToas
     }, []);
     const onClose = useCallback(() => {
         dispatch(createAlertToastAction.clearConfig());
-        requestAnimationFrame(() => {
-            dispatch(createAlertToastAction.close());
-        });
+    }, []);
+    const onClearConfig = useCallback(() => {
+        dispatch(createAlertToastAction.clearConfig());
     }, []);
     return ({
         state,
         onOpen,
         onClose,
+        onClearConfig,
     })
 }

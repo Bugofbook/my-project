@@ -5,6 +5,7 @@ export function useYesnoDialog<T extends Record<string, unknown>>(initialProps: 
     state: YesnoDialogState<T>,
     onOpen: (props?: SetConfigYesnoDialogProps<T>) => void,
     onClose: () => void,
+    onClearConfig: () => void,
     onYes: (prop?: unknown) => void,
     onNo: (prop?: unknown) => void,
 } {
@@ -19,9 +20,9 @@ export function useYesnoDialog<T extends Record<string, unknown>>(initialProps: 
     }, []);
     const onClose = useCallback(() => {
         dispatch(createYesnoDialogAction.close());
-        requestAnimationFrame(() => {
-            dispatch(createYesnoDialogAction.clearConfig());
-        });
+    }, []);
+    const onClearConfig = useCallback(() => {
+        dispatch(createYesnoDialogAction.clearConfig());
     }, []);
     const onYes = useCallback((prop?: unknown) => {
         if (state.onYes) {
@@ -39,6 +40,7 @@ export function useYesnoDialog<T extends Record<string, unknown>>(initialProps: 
         state,
         onOpen,
         onClose,
+        onClearConfig,
         onYes,
         onNo,
     })

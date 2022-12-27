@@ -6,6 +6,7 @@ export function useModal<T extends Record<string, unknown>>(initState: ModalInit
     state: ModalState<T>,
     onOpen: (config?: ModalSetProps<T>) => void,
     onClose: () => void,
+    onClearConfig: () => void,
 } {
     const [state, dispatch] = useReducer<modalReducer<T>>(modalReducer, initializeModalState<T>(initState));
     const onOpen = useCallback((config?: ModalSetProps<T>) => {
@@ -18,14 +19,14 @@ export function useModal<T extends Record<string, unknown>>(initState: ModalInit
     }, []);
     const onClose = useCallback(() => {
         dispatch(createModalAction.clearConfig());
-        requestAnimationFrame(() => {
-            dispatch(createModalAction.close());
-        });
     }, []);
-
+    const onClearConfig = useCallback(() => {
+        dispatch(createModalAction.clearConfig());
+    }, []);
     return {
         state,
         onOpen,
         onClose,
+        onClearConfig,
     }
 }

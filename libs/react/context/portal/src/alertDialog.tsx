@@ -2,6 +2,7 @@ import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCal
 import { alertDialogState, initializeAlertDialogState, alertDialogReducer, AlertDialogInitialProps, AlertDialogSetProps, createAlertDialogAction } from '@bugofbook/react/reducer/feedback';
 export type AlertDialogComponent<T extends Record<string, unknown>> = alertDialogState<T> & {
     onClose?: () => unknown,
+    onClearConfig?: () => unknown,
     onConfirm?: (prop: unknown) => unknown,
 }
 
@@ -19,13 +20,13 @@ export function createAlertDialogContext<T extends Record<string, unknown>>({mod
             requestAnimationFrame(() => {
                 dispatch(createAlertDialogAction.open());
             });
-        }, [])
+        }, [dispatch])
         const close = useCallback(() => {
             dispatch(createAlertDialogAction.close());
-            requestAnimationFrame(() => {
-                dispatch(createAlertDialogAction.clearConfig());
-            });
-        }, [])
+        }, [dispatch])
+        const clearConfig = useCallback(() => {
+            dispatch(createAlertDialogAction.clearConfig());
+        }, [dispatch])
         const confirm = useCallback((prop: unknown) => {
             if (state.onConfirm) {
                 state.onConfirm(prop)
@@ -35,7 +36,7 @@ export function createAlertDialogContext<T extends Record<string, unknown>>({mod
         return (
             <OpenAlertDialogContext.Provider value={open}>
                 { children}
-                <AlertDialogComponent {...state} onConfirm={confirm} onClose={close} />
+                <AlertDialogComponent {...state} onConfirm={confirm} onClose={close} onClearConfig={clearConfig} />
             </OpenAlertDialogContext.Provider>
         )
     }

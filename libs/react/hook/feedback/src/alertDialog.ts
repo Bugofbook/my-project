@@ -5,6 +5,7 @@ export function useAlertDialog<T extends Record<string, unknown>>(prop: alertToa
     state: alertDialogState<T>,
     onOpen: (config?: T) => void,
     onClose: () => void,
+    onClearConfig: () => void,
     onConfirm: (prop?: unknown) => void,
 } {
     const [state, dispatch] =  useReducer<alertDialogReducer<T>>(alertDialogReducer, initializeAlertDialogState(prop));
@@ -18,9 +19,9 @@ export function useAlertDialog<T extends Record<string, unknown>>(prop: alertToa
     }, []);
     const onClose = useCallback(() => {
         dispatch(createAlertDialogAction.close());
-        requestAnimationFrame(() => {
-            dispatch(createAlertDialogAction.clearConfig());
-        });
+    }, []);
+    const onClearConfig = useCallback(() => {
+        dispatch(createAlertDialogAction.clearConfig());
     }, []);
     const onConfirm = useCallback((prop?: unknown) => {
         if (state.onConfirm) {
@@ -32,6 +33,7 @@ export function useAlertDialog<T extends Record<string, unknown>>(prop: alertToa
         state,
         onOpen,
         onClose,
+        onClearConfig,
         onConfirm,
     })
 }
