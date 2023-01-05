@@ -4,8 +4,8 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Button from '@mui/joy/Button';
-import { YesnoDialogComponent } from '@bugofbook/react/context/portal';
-export function YesnoDialogComponent({open, onClose, onYes, onNo, title, content, yesText, noText}: YesnoDialogComponent<Record<string, never>>) {
+import type { YesnoDialogProps } from '@bugofbook/react/context/portal';
+export function YesnoDialogComponent({open, onClose, onYes, onNo, title, content, yesText, noText}: YesnoDialogProps<Record<string, unknown>>) {
     const handleClose=(event: unknown, reason: string) => {
         if (onClose) {
             onClose()

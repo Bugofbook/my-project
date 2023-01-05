@@ -12,7 +12,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { ColorPaletteProp } from '@mui/joy/styles';
-import { AlertToastComponent } from '@bugofbook/react/context/portal';
+import type { AlertToastProps } from '@bugofbook/react/context/portal';
 
 // const items: {
 //     title: string;
@@ -72,7 +72,7 @@ const Content = ({title, content}: {title?: string, content?: string}) => {
     }
 }
 
-export function AlertToastComponent({open, onClose, title, content, toastType}: AlertToastComponent<Record<string, never>>) {
+export function AlertToastComponent({open, onClose, title, content, toastType}: AlertToastProps<Record<string, unknown>>) {
     const {color, Icon} = items[toastType || 'info'];
     const handleClose=useCallback((event: unknown, reason: string) => {
         if (onClose) {

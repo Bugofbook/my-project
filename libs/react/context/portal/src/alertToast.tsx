@@ -1,13 +1,13 @@
 import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
 import { alertToastState, initializeAlertToastState, alertToastReducer, alertInitialStateProps, AlertToastSetProps, createAlertToastAction } from '@bugofbook/react/reducer/feedback';
 
-export type AlertToastComponent<T extends Record<string, unknown>> = alertToastState<T> & {
+export type AlertToastProps<T extends Record<string, unknown>> = alertToastState<T> & {
     onClose?: () => unknown,
     onClearConfig?: () => unknown,
 }
 
 type AlertToastContextProps<T extends Record<string, unknown>> = {
-    modal: FunctionComponent<AlertToastComponent<T>>,
+    modal: FunctionComponent<AlertToastProps<T>>,
 }
 export function createAlertToastContext<T extends Record<string, unknown>>({modal}: AlertToastContextProps<T>) {
     const AlertToastComponent = modal

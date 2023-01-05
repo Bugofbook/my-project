@@ -1,20 +1,20 @@
 import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
-import { YesnoDialogState, initializeYesnoDialogState, yesnoDialogReducer, YesnoDialogInitialProps, createYesnoDialogAction } from "@bugofbook/react/reducer/feedback";
-export type YesnoDialogComponent<T extends Record<string, unknown>> = YesnoDialogState<T> & {
+import { YesnoDialogState, initializeYesnoDialogState, yesnoDialogReducer, YesnoDialogInitialProps, YesnocancelDialogSetProps, createYesnoDialogAction } from "@bugofbook/react/reducer/feedback";
+export type YesnoDialogProps<T extends Record<string, unknown>> = YesnoDialogState<T> & {
     onClose?: () => unknown,
     onClearConfig?: () => unknown,
     onYes?: (prop: unknown) => unknown,
     onNo?: (prop: unknown) => unknown,
 }
 type YesnoDialogContextProps<T extends Record<string, unknown>> = {
-    modal: FunctionComponent<YesnoDialogComponent<T>>,
+    modal: FunctionComponent<YesnoDialogProps<T>>,
 }
 export function createYesnoDialogContext<T extends Record<string, unknown>>({modal}: YesnoDialogContextProps<T>) {
     const YesnoDialogComponent = modal
-    const OpenYesnoDialogContext = createContext((prop: YesnoDialogInitialProps<T>) => { return; })
+    const OpenYesnoDialogContext = createContext((prop: YesnocancelDialogSetProps<T>) => { return; })
     const YesnoDialogProvider = ({ children, initialState}: PropsWithChildren<{initialState: YesnoDialogInitialProps<T>}>) => {
         const [state, dispatch] = useReducer(yesnoDialogReducer, initializeYesnoDialogState<T>(initialState))
-        const open = useCallback((config: YesnoDialogInitialProps<T>) => {
+        const open = useCallback((config: YesnocancelDialogSetProps<T>) => {
             dispatch(createYesnoDialogAction.setConfig(config));
             requestAnimationFrame(() => {
                 dispatch(createYesnoDialogAction.open());

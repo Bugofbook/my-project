@@ -1,15 +1,15 @@
 import { useReducer, useCallback } from "react";
-import { alertDialogReducer, initializeAlertDialogState, createAlertDialogAction, alertToastState, alertDialogState } from '@bugofbook/react/reducer/feedback'
+import { alertDialogReducer, initializeAlertDialogState, createAlertDialogAction, alertToastState, alertDialogState, AlertDialogSetProps } from '@bugofbook/react/reducer/feedback'
 
 export function useAlertDialog<T extends Record<string, unknown>>(prop: alertToastState<T>): {
     state: alertDialogState<T>,
-    onOpen: (config?: T) => void,
+    onOpen: (config?: AlertDialogSetProps<T>) => void,
     onClose: () => void,
     onClearConfig: () => void,
     onConfirm: (prop?: unknown) => void,
 } {
     const [state, dispatch] =  useReducer<alertDialogReducer<T>>(alertDialogReducer, initializeAlertDialogState(prop));
-    const onOpen = useCallback((config?: T) => {
+    const onOpen = useCallback((config?: AlertDialogSetProps<T>) => {
         if (config) {
             dispatch(createAlertDialogAction.setConfig(config));
         }

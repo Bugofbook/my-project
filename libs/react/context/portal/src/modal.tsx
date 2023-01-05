@@ -23,7 +23,7 @@ export function createModalContext<T extends Record<string, unknown>>({modal}: M
             });
         }, [dispatch]);
         const close = useCallback(() => {
-            dispatch(createModalAction.clearConfig());
+            dispatch(createModalAction.close());
         }, [dispatch]);
         const clearConfig = useCallback(() => {
             dispatch(createModalAction.clearConfig());

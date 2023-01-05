@@ -1,13 +1,13 @@
 import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
 import { alertDialogState, initializeAlertDialogState, alertDialogReducer, AlertDialogInitialProps, AlertDialogSetProps, createAlertDialogAction } from '@bugofbook/react/reducer/feedback';
-export type AlertDialogComponent<T extends Record<string, unknown>> = alertDialogState<T> & {
+export type AlertDialogprops<T extends Record<string, unknown>> = alertDialogState<T> & {
     onClose?: () => unknown,
     onClearConfig?: () => unknown,
     onConfirm?: (prop: unknown) => unknown,
 }
 
 type AlertDialogContextProps<T extends Record<string, unknown>> = {
-    modal: FunctionComponent<AlertDialogComponent<T>>,
+    modal: FunctionComponent<AlertDialogprops<T>>,
 }
 
 export function createAlertDialogContext<T extends Record<string, unknown>>({modal}: AlertDialogContextProps<T>) {

@@ -1,6 +1,6 @@
 import { createContext, useReducer, PropsWithChildren, FunctionComponent, useCallback } from 'react';
 import { yesnocancelDialogState, initializeYesnocancelDialogState, yesnocancelDialogReducer, YesnocancelDialogInitialProps, YesnocancelDialogSetProps, createYesnocancelDialogAction } from "@bugofbook/react/reducer/feedback";
-export type YesnocancelDialogComponent<T extends Record<string, unknown>> = yesnocancelDialogState<T> & {
+export type YesnocancelDialogProps<T extends Record<string, unknown>> = yesnocancelDialogState<T> & {
     onClose?: () => unknown,
     onClearConfig?: () => unknown,
     onYes?: (prop: unknown) => unknown,
@@ -8,7 +8,7 @@ export type YesnocancelDialogComponent<T extends Record<string, unknown>> = yesn
     onCancel?: (prop: unknown) => unknown,
 }
 type YesnocancelDialogContextProps<T extends Record<string, unknown>> = {
-    modal: FunctionComponent<YesnocancelDialogComponent<T>>,
+    modal: FunctionComponent<YesnocancelDialogProps<T>>,
 }
 export function createYesnocancelDialogContext<T extends Record<string, unknown>>({ modal }: YesnocancelDialogContextProps<T>) {
     const YesnocancelDialogComponent = modal

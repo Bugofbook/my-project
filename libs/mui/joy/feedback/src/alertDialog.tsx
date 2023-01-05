@@ -4,8 +4,8 @@ import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import ModalDialog from '@mui/joy/ModalDialog';
 import Button from '@mui/joy/Button';
-import { AlertDialogComponent } from '@bugofbook/react/context/portal';
-export function AlertDialogComponent({open, onClose, onConfirm, title, content, confirmText}: AlertDialogComponent<Record<string, never>>) {
+import type { AlertDialogprops } from '@bugofbook/react/context/portal';
+export function AlertDialogComponent({open, onClose, onConfirm, title, content, confirmText}: AlertDialogprops<Record<string, unknown>>) {
     const handleClose=(event: unknown, reason: string) => {
         if (onClose) {
             onClose()
