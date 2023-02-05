@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Message } from '@my-project/api-interfaces';
 import { GlobalProvider } from '../context/Global';
-import Layout from '../layout/Global';
+// import Layout from '../layout/Global';
+import GlobalJoy from '../layout/GlobalJoy';
 import HomePage from '../page/home';
-import ModalPage from '../page/modal';
+import ModalPage from '../page/ModalPage';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
     children: [
       { 
         path: '/',
-        element: <Layout />,
+        element: <GlobalJoy />,
         children: [
           { path: '/', element: <HomePage /> },
           { path: '/modal', element: <ModalPage /> },

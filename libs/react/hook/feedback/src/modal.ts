@@ -18,7 +18,7 @@ export function useModal<T extends Record<string, unknown>>(initState: ModalInit
         });
     }, []);
     const onClose = useCallback(() => {
-        dispatch(createModalAction.clearConfig());
+        dispatch(createModalAction.close());
     }, []);
     const onClearConfig = useCallback(() => {
         dispatch(createModalAction.clearConfig());
