@@ -64,6 +64,7 @@
       "@bugofbook/react/context/portal": [
         "libs/react/context/portal/src/index.ts"
       ],
+      "@bugofbook/react/geo": ["libs/react/geo/src/index.ts"],
       "@bugofbook/react/hook/feedback": [
         "libs/react/hook/feedback/src/index.ts"
       ],
