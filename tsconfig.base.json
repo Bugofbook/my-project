@@ -33,6 +33,7 @@
       "@bugofbook/browser/file/write/excel": [
         "libs/browser/file/write/excel/src/index.ts"
       ],
+      "@bugofbook/data/flux": ["libs/isomorphic/data/flux/src/index.ts"],
       "@bugofbook/data/queue/map": [
         "libs/isomorphic/data/queue/map/src/index.ts"
       ],
