@@ -2,13 +2,10 @@ type ListenerCallback = () => void;
 type Action<Type extends string = string> = {
     type: Type,
 }
-interface AnyAction extends Action {
-    payload: any
-}
-interface UnknowAction extends Action {
+interface UnknownAction extends Action {
     payload: unknown
 }
-type Reducer<State, A extends Action = UnknowAction> = (state: State, action: A, initState: State) => State;
+type Reducer<State, A extends Action = UnknownAction> = (state: State, action: A, initState: State) => State;
 
 export function createStore<State, A extends Action<string>>(reducer: Reducer<State, A>, initState: State) {
     const listeners: Set<ListenerCallback> = new Set();

@@ -1,11 +1,5 @@
 import { createStore } from './store';
 
-// const createSubject = <T>() => {
-
-//   return {
-
-//   }
-// }
 type Action = {
   type: 'add',
   payload: number,
@@ -48,7 +42,7 @@ describe('store', () => {
     const onChange = () => {
       subject1.setValue(store.getStore());
     }
-    const unsubscribesubject1 = store.subscribe(onChange);
+    const unsubscribeSubject1 = store.subscribe(onChange);
     store.dispatch({
       type: 'add',
       payload: 1,
@@ -59,31 +53,31 @@ describe('store', () => {
       payload: 1,
     });
     expect(subject1.getContext()).toEqual('subject1: 0');
-    unsubscribesubject1();
+    unsubscribeSubject1();
   });
   it('Subject2', () => {
     const store = createStore(reducer, 0);
-    const subjetc1 = createSubject('subject1', 0);
+    const subject1 = createSubject('subject1', 0);
     const subject2 = createSubject('subject2', 0);
     const onChange1 = () => {
-      subjetc1.setValue(store.getStore());
+      subject1.setValue(store.getStore());
     }
     const onChange2 = () => {
       subject2.setValue(store.getStore());
     }
-    const unsubscribesubject1 = store.subscribe(onChange1);
-    const unsubscribesubject2 = store.subscribe(onChange2);
+    const unsubscribeSubject1 = store.subscribe(onChange1);
+    const unsubscribeSubject2 = store.subscribe(onChange2);
     store.dispatch({
       type: 'add',
       payload: 2,
     })
-    unsubscribesubject1();
+    unsubscribeSubject1();
     store.dispatch({
       type: 'add',
       payload: 3,
     });
-    expect(subjetc1.getContext()).toEqual('subject1: 2');
+    expect(subject1.getContext()).toEqual('subject1: 2');
     expect(subject2.getContext()).toEqual('subject2: 5');
-    unsubscribesubject2();
+    unsubscribeSubject2();
   })
 });
