@@ -37,9 +37,6 @@
       "@bugofbook/data/queue/map": [
         "libs/isomorphic/data/queue/map/src/index.ts"
       ],
-      "@bugofbook/data/queueMap": [
-        "libs/isomorphic/data/queue-map/src/index.ts"
-      ],
       "@bugofbook/isomorphic/file/read/core": [
         "libs/isomorphic/file/read/core/src/index.ts"
       ],
