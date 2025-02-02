@@ -1,4 +1,4 @@
-import { Reducer } from "react";
+import type { Reducer } from "react";
 import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type ModalAction<T extends Record<string, unknown>> = OpenAction | CloseAction | SetConfigAction<T> | ClearConfigAction;

@@ -1,4 +1,4 @@
-import { Reducer } from "react";
+import type { Reducer } from "react";
 import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type yesnocancelDialogAppendKey = 'title' | 'content' | 'yesText' | 'cancelText' | 'noText';

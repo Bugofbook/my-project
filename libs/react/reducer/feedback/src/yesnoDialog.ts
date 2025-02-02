@@ -1,4 +1,4 @@
-import { Reducer } from "react";
+import type { Reducer } from "react";
 import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type yesnoDialogAppendKey = 'title' | 'content' | 'yesText' | 'noText';
@@ -58,7 +58,7 @@ export function initializeYesnoDialogState<T extends Record<string, unknown>>(pr
 function createOpenAction(): openYesnoDialogAction {
     return ({
         type: 'open',
-    }) 
+    })
 }
 function createCloseAction(): closeYesnoDialogAction {
     return ({

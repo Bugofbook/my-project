@@ -1,4 +1,4 @@
-import { Reducer } from "react";
+import type { Reducer } from "react";
 import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type alertToastAppendKey = 'toastType'| 'title' | 'content'
@@ -47,7 +47,7 @@ export function initializeAlertToastState<T extends Record<string, unknown>>(pro
 function createOpenAction(): openAlertToastAction {
     return ({
         type: 'open',
-    }) 
+    })
 }
 function createCloseAction(): closeAlertToastAction {
     return ({

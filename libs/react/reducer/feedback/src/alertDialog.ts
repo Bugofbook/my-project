@@ -1,4 +1,4 @@
-import { Reducer } from "react";
+import type { Reducer } from "react";
 import { State, OpenAction, CloseAction, SetConfigAction, ClearConfigAction, InitialProps, SetProps} from './core'
 
 type alertDialogAppendKey = 'title' | 'content' | 'confirmText';
@@ -54,7 +54,7 @@ export function initializeAlertDialogState<T extends Record<string, unknown>>(pr
 function createOpenAction(): openAlertDialogAction {
     return ({
         type: 'open',
-    }) 
+    })
 }
 function createCloseAction(): closeAlertDialogAction {
     return ({
